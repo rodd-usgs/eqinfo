@@ -15,7 +15,7 @@ parser.add_argument("-s", "--stime", action="store", dest="stime",
 
 parser.add_argument("-e", "--etime", action="store", dest="etime",
         default=False, type=str, required=False,
-        help="end time for search window, ex. YYYY-DDD hh:mm. Will accept any UTCDateTime format")
+        help="end time for search window, Will accept any UTCDateTime format")
 
 # alternative option to -e
 parser.add_argument("-n", "--number", action="store", dest="number",
@@ -75,18 +75,23 @@ for eve in cat:
     ev = read_events(qml)[0]
     nps = ev.focal_mechanisms[0].nodal_planes
     timestring = str(eve.origins[0].time).split('T')
-    timestring = "Time: {} {}".format(timestring[0], timestring[1].split('.')[0])
-    locstring = "Lat: {:.2f}, Lon: {:.2f}, Depth: {:.2f}".format(eve.origins[0].latitude,
-            eve.origins[0].longitude, eve.origins[0].depth/1000)
+    timestring = "Time: {} {}".format(timestring[0],
+            timestring[1].split('.')[0])
+    locstring = "Lat: {:.2f}, Lon: {:.2f}, Depth: {:.2f}".format(
+            eve.origins[0].latitude, eve.origins[0].longitude,
+            eve.origins[0].depth/1000)
     try:
-        magstring = "Magnitude: {:.2f} {}\nNodal Planes (S, D, R): ({},{},{}), ({},{},{})".format(
-                eve.magnitudes[0].mag, eve.magnitudes[0].magnitude_type,
-                nps.nodal_plane_1.strike, nps.nodal_plane_1.dip, nps.nodal_plane_1.rake,
-                nps.nodal_plane_2.strike, nps.nodal_plane_2.dip, nps.nodal_plane_2.rake)
+        magstring = "Magnitude: {:.2f} {}\nNodal Planes (S, D, R): ({},{},{}) \
+                ({},{},{})".format(eve.magnitudes[0].mag,
+                eve.magnitudes[0].magnitude_type,
+                nps.nodal_plane_1.strike, nps.nodal_plane_1.dip,
+                nps.nodal_plane_1.rake, nps.nodal_plane_2.strike,
+                nps.nodal_plane_2.dip, nps.nodal_plane_2.rake)
     except:
         magstring = "Magnitude: {:.2f} {}".format(
                 eve.magnitudes[0].mag, eve.magnitudes[0].magnitude_type)
-    print("EVENT ID: {}\n{} {} \n{}\n".format(event_id, timestring, locstring, magstring))
+    print("EVENT ID: {}\n{} {} \n{}\n".format(event_id, timestring,
+            locstring, magstring))
 
 
 #lats = [eve.origins[0].latitude for eve in cat]
